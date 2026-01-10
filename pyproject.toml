@@ -1,0 +1,20 @@
+[project]
+name = "kotoba-api"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Tim Beattie",email = "trbeattie@outlook.com"}
+]
+readme = "README.md"
+requires-python = ">=3.14,<4"
+dependencies = [
+    "ariadne (>=0.26.2,<0.27.0)",
+    "fastapi[standard] (>=0.128.0,<0.129.0)"
+]
+
+[tool.poetry]
+packages = [{include = "kotoba_api", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
