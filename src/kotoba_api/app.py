@@ -1,12 +1,8 @@
-from ariadne import QueryType, make_executable_schema
+from ariadne import QueryType, load_schema_from_path, make_executable_schema
 from ariadne.asgi import GraphQL
 from fastapi import FastAPI
 
-type_defs = """
-    type Query {
-        hello: String!
-    }
-"""
+type_defs = load_schema_from_path("schema")
 
 query = QueryType()
 
