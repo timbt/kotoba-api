@@ -23,7 +23,10 @@ def test_kanji_query(client):
         json={
             "query": """
                 query {
-                    kanji(character: "猫")
+                    kanji(literal: "猫") {
+                        literal
+                        meaning
+                    }
                 }
             """
         },
