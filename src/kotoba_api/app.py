@@ -1,6 +1,15 @@
+import os
+
 from ariadne import QueryType, load_schema_from_path, make_executable_schema
 from ariadne.asgi import GraphQL
+from dotenv import load_dotenv
 from fastapi import FastAPI
+
+from kotoba_api.util import fetch_kanjidic2
+
+load_dotenv()
+
+kanjidic2_etree = fetch_kanjidic2(os.getenv("KANJIDIC2_PATH"))
 
 type_defs = load_schema_from_path("schema")
 
