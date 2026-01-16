@@ -5,11 +5,11 @@ from ariadne.asgi import GraphQL
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
-from kotoba_api.util import fetch_kanjidic2
+from kotoba_api.util import kanjidic2_to_kanji
 
 load_dotenv()
 
-kanjidic2_etree = fetch_kanjidic2(os.getenv("KANJIDIC2_PATH"))
+kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
 
 type_defs = load_schema_from_path("schema")
 

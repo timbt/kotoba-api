@@ -7,7 +7,7 @@ from kotoba_api.data_models import Kanji
 logger = logging.getLogger(__name__)
 
 
-def fetch_kanjidic2(path: str):
+def _fetch_kanjidic2_from_fs(path: str):
     try:
         return ET.parse(path)
     except FileNotFoundError:
@@ -18,5 +18,9 @@ def fetch_kanjidic2(path: str):
         raise
 
 
-def kanjidic2_to_kanji(kanjidic2tree: ET) -> list[Kanji]:
-    pass
+def kanjidic2_to_kanji(path: str | None) -> list[Kanji]:
+    if path is None:
+        logger.error("No KANJIDIC2 file specified. Is KANJIDIC2_PATH unset?")
+        return []
+
+    return []
