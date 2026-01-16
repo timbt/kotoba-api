@@ -1,14 +1,15 @@
 import logging
-from xml.etree.ElementTree import ElementTree, ParseError
+import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import ParseError
 
 from kotoba_api.data_models import Kanji
 
 logger = logging.getLogger(__name__)
 
 
-def fetch_kanjidic2(path: str) -> ElementTree:
+def fetch_kanjidic2(path: str):
     try:
-        return ElementTree().parse(path)
+        return ET.parse(path)
     except FileNotFoundError:
         logging.critical("Could not find specified kanjidic2 file %s" % path)
         raise
@@ -17,5 +18,5 @@ def fetch_kanjidic2(path: str) -> ElementTree:
         raise
 
 
-def kanjidic2_to_kanji(kanjidic2tree: ElementTree) -> list[Kanji]:
+def kanjidic2_to_kanji(kanjidic2tree: ET) -> list[Kanji]:
     pass
