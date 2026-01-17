@@ -28,7 +28,7 @@ def test_kanji_query(client: TestClient):
                 query {
                     kanji(literal: "猫") {
                         literal
-                        meaning
+                        meanings
                     }
                 }
             """

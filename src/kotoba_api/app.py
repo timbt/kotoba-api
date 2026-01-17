@@ -11,7 +11,7 @@ load_dotenv()
 
 kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
 
-type_defs = load_schema_from_path("schema")
+type_defs = load_schema_from_path("src/schema")
 
 query = QueryType()
 

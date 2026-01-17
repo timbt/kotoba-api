@@ -1,0 +1,13 @@
+type Kanji {
+  literal: String!
+  readings_on: [String]!
+  readings_kun: [String]!
+  meanings: [String]!
+}
+
+
+type Query {
+  hello: String!
+  kanji(literal: String!): Kanji
+}
+
