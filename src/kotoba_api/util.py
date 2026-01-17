@@ -90,6 +90,15 @@ def kanjidic2_to_kanji(path: str | None) -> list[Kanji]:
         logger.error("No KANJIDIC2 file specified. Is KANJIDIC2_PATH unset?")
         return []
 
-    etree = _fetch_kanjidic2_from_fs(path)
+    kanji: list[Kanji] = []
 
-    return []
+    etree = _fetch_kanjidic2_from_fs(path)
+    for character_el in etree.findall("character"):
+        character = _parse_kanjidic2_element_to_kanji(character_el)
+        if len(character.readings_on) == 0 and len(character.readings_kun) == 0:
+            logging.warning("No readings found for character %s" % character.literal)
+        if len(character.meanings) == 0:
+            logging.warning("No meanings found for character %s" % character.literal)
+        kanji.append(character)
+
+    return kanji

@@ -75,4 +75,8 @@ def test_parse_kanjidic2_element_to_kanji_parses_single_kanji():
 
 def test_kanjidic2_to_kanji_parses_kanji():
     kanji = kanjidic2_to_kanji("tests/fixtures/kanjidic2.xml")
-    assert kanji == []
+
+    assert kanji[0].literal == "亜"
+    assert kanji[0].readings_on == ("ア",)
+    assert kanji[0].readings_kun == ("つ.ぐ",)
+    assert kanji[0].meanings == ("Asia", "rank next", "come after", "-ous")
