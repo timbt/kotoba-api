@@ -68,9 +68,20 @@ def _parse_kanjidic2_element_to_kanji(element: Element) -> Kanji:
             ):
                 if el.text:
                     readings_kun = readings_kun + (el.text,)
+            # Meaning elements are treating as english meanings if they have no 'm_lang' attribute
+            # or if the m_lang attribute is explicitly set to "en"
+            elif el.tag == "meaning" and (
+                el.get("m_lang") is None
+                or (el.get("m_lang") and el.get("m_lang") == "en")
+            ):
+                if el.text:
+                    meanings = meanings + (el.text,)
 
     return Kanji(
-        literal=literal, readings_on=readings_on, readings_kun=readings_kun, meanings=()
+        literal=literal,
+        readings_on=readings_on,
+        readings_kun=readings_kun,
+        meanings=meanings,
     )
 
 
