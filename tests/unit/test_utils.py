@@ -69,6 +69,7 @@ def test_parse_kanjidic2_element_to_kanji_parses_single_kanji():
     kanji = _parse_kanjidic2_element_to_kanji(element)
     assert kanji.literal == "猫"
     assert kanji.readings_on == ("ビョウ",)
+    assert kanji.readings_kun == ("ねこ",)
 
 
 def test_kanjidic2_to_kanji_parses_kanji():

@@ -61,8 +61,17 @@ def _parse_kanjidic2_element_to_kanji(element: Element) -> Kanji:
             ):
                 if el.text:
                     readings_on = readings_on + (el.text,)
+            elif (
+                el.tag == "reading"
+                and el.get("r_type")
+                and el.get(key="r_type") == "ja_kun"
+            ):
+                if el.text:
+                    readings_kun = readings_kun + (el.text,)
 
-    return Kanji(literal=literal, readings_on=readings_on, readings_kun=(), meanings=())
+    return Kanji(
+        literal=literal, readings_on=readings_on, readings_kun=readings_kun, meanings=()
+    )
 
 
 def kanjidic2_to_kanji(path: str | None) -> list[Kanji]:
