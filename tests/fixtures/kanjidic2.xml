@@ -504,4 +504,21 @@
 <nanori>い</nanori>
 </reading_meaning>
 </character>
+<!-- Entry for Kanji: 𠂉 -->
+<character>
+<literal>𠂉</literal>
+<codepoint>
+<cp_value cp_type="ucs">20089</cp_value>
+<cp_value cp_type="jis213">2-01-01</cp_value>
+</codepoint>
+<radical>
+<rad_value rad_type="classical">4</rad_value>
+</radical>
+<misc>
+<stroke_count>2</stroke_count>
+</misc>
+<query_code>
+<q_code qc_type="skip">4-2-4</q_code>
+</query_code>
+</character>
 </kanjidic2>

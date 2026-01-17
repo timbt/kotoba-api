@@ -94,11 +94,17 @@ def kanjidic2_to_kanji(path: str | None) -> list[Kanji]:
 
     etree = _fetch_kanjidic2_from_fs(path)
     for character_el in etree.findall("character"):
-        character = _parse_kanjidic2_element_to_kanji(character_el)
-        if len(character.readings_on) == 0 and len(character.readings_kun) == 0:
-            logging.warning("No readings found for character %s" % character.literal)
-        if len(character.meanings) == 0:
-            logging.warning("No meanings found for character %s" % character.literal)
-        kanji.append(character)
+        try:
+            character = _parse_kanjidic2_element_to_kanji(character_el)
+        except KanjiParsingException as e:
+            logging.info("Issue parsing kanji: %s" % e)
+            character = None
+
+        if character is not None:
+            if len(character.readings_on) == 0 and len(character.readings_kun) == 0:
+                logging.info("No readings found for character %s" % character.literal)
+            if len(character.meanings) == 0:
+                logging.info("No meanings found for character %s" % character.literal)
+            kanji.append(character)
 
     return kanji

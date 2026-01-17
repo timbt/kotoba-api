@@ -1,3 +1,4 @@
+import os
 import xml.etree.ElementTree as ET
 
 from kotoba_api.util import _parse_kanjidic2_element_to_kanji, kanjidic2_to_kanji
@@ -73,11 +74,18 @@ def test_parse_kanjidic2_element_to_kanji_parses_single_kanji():
     assert kanji.meanings == ("cat",)
 
 
-def test_kanjidic2_to_kanji_parses_kanji():
-    kanji = kanjidic2_to_kanji("tests/fixtures/kanjidic2.xml")
+def test_kanjidic2_to_kanji_parses_first_kanji():
+    kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
 
-    assert len(kanji) == 3
     assert kanji[0].literal == "亜"
     assert kanji[0].readings_on == ("ア",)
     assert kanji[0].readings_kun == ("つ.ぐ",)
     assert kanji[0].meanings == ("Asia", "rank next", "come after", "-ous")
+
+
+def test_kanjidic2_to_kanji_skips_radicals():
+    etree = ET.parse(os.getenv("KANJIDIC2_PATH") or "")
+    kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
+
+    assert len(etree.findall("character")) == 4
+    assert len(kanji) == 3
