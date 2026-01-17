@@ -24,7 +24,7 @@ def _fetch_kanjidic2_from_fs(path: str) -> ET.ElementTree[Element[str]]:
         raise
 
 
-def _parse_kanjidic2_element_to_kanji(el: Element) -> Kanji:
+def _parse_kanjidic2_element_to_kanji(element: Element) -> Kanji:
     """
     Parses a kanji XML element into a more friendly dataclass object.
 
@@ -32,14 +32,37 @@ def _parse_kanjidic2_element_to_kanji(el: Element) -> Kanji:
     element from a KANJIDIC2 file. Inputs lacking the expected subelements of a
     'character' element will cause the method to raise a KanjiParsingException.
     """
-    literalElement = el.find("literal")
-    if literalElement is None:
+    # Parse Kanji literal
+    literal_element = element.find("literal")
+    if literal_element is None:
         raise KanjiParsingException("Missing 'literal' element")
-    literal = literalElement.text
+    literal = literal_element.text
     if not literal:
         raise KanjiParsingException("Missing text field on 'literal' element")
 
-    return Kanji(literal=literal, readings_on=(), readings_kun=(), meanings=())
+    # Attempt to fetch readming_meaning element
+    reading_meaning_element = element.find("reading_meaning")
+    if reading_meaning_element is None:
+        raise KanjiParsingException(
+            "Missing 'reading_meaning' element in kanji entry for %s" % literal
+        )
+
+    readings_on: tuple[str, ...] = ()
+    readings_kun: tuple[str, ...] = ()
+    meanings: tuple[str, ...] = ()
+
+    # Extract readings and meanings from any 'rmgroup' elements present
+    for rmgroup_element in reading_meaning_element.findall("rmgroup"):
+        for el in rmgroup_element:
+            if (
+                el.tag == "reading"
+                and el.get("r_type")
+                and el.get(key="r_type") == "ja_on"
+            ):
+                if el.text:
+                    readings_on = readings_on + (el.text,)
+
+    return Kanji(literal=literal, readings_on=readings_on, readings_kun=(), meanings=())
 
 
 def kanjidic2_to_kanji(path: str | None) -> list[Kanji]:

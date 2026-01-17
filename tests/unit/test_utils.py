@@ -68,6 +68,7 @@ def test_parse_kanjidic2_element_to_kanji_parses_single_kanji():
     element = ET.fromstring(kanji_xml_neko)
     kanji = _parse_kanjidic2_element_to_kanji(element)
     assert kanji.literal == "猫"
+    assert kanji.readings_on == ("ビョウ",)
 
 
 def test_kanjidic2_to_kanji_parses_kanji():
