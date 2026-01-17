@@ -13,7 +13,8 @@ dependencies = [
     "ruff (>=0.14.11,<0.15.0)",
     "pytest (>=9.0.2,<10.0.0)",
     "dotenv (>=0.9.9,<0.10.0)",
-    "ty (>=0.0.12,<0.0.13)"
+    "ty (>=0.0.12,<0.0.13)",
+    "pytest-env (>=1.2.0,<2.0.0)"
 ]
 
 [tool.poetry]
@@ -28,3 +29,6 @@ extend-select = ["I"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+env = [
+    "KANJIDIC2_PATH=tests/fixtures/kanjidic2.xml"
+]
