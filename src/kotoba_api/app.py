@@ -21,6 +21,11 @@ def resolve_hello(*_):
     return "Hello world!"
 
 
+@query.field("kanji")
+def resolve_kanji(*_, literal=None):
+    return {"literal": "猫", "meanings": [], "readings_on": [], "readings_kun": []}
+
+
 # Create executable schema instance
 schema = make_executable_schema(type_defs, query)
 
