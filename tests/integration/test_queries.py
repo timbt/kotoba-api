@@ -28,6 +28,8 @@ def test_kanji_query(client: TestClient):
                 query {
                     kanji(literal: "猫") {
                         literal
+                        readings_on
+                        readings_kun
                         meanings
                     }
                 }
@@ -36,3 +38,7 @@ def test_kanji_query(client: TestClient):
     )
 
     assert response.status_code == 200
+
+    payload = response.json()
+    assert "errors" not in payload
+    assert payload["data"]["kanji"]["literal"] == "猫"
