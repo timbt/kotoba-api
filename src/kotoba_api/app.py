@@ -5,6 +5,7 @@ from ariadne.asgi import GraphQL
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
+from kotoba_api.services import get_kanji_by_literal
 from kotoba_api.util import kanjidic2_to_kanji
 
 load_dotenv()
@@ -23,7 +24,9 @@ def resolve_hello(*_):
 
 @query.field("kanji")
 def resolve_kanji(*_, literal=None):
-    return {"literal": "猫", "meanings": [], "readings_on": [], "readings_kun": []}
+    if literal is None:
+        return None
+    return get_kanji_by_literal(literal)
 
 
 # Create executable schema instance
