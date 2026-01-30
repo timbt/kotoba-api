@@ -2,7 +2,7 @@ import logging
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element, ParseError
 
-from kotoba_api.data_models import Kanji
+from kotoba_api.models import Kanji
 
 logger = logging.getLogger(__name__)
 
