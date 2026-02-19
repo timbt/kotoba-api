@@ -87,5 +87,5 @@ def test_kanjidic2_to_kanji_skips_radicals():
     etree = ET.parse(os.getenv("KANJIDIC2_PATH") or "")
     kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
 
-    assert len(etree.findall("character")) == 4
-    assert len(kanji) == 3
+    assert len(etree.findall("character")) == 5
+    assert len(kanji) == 4
