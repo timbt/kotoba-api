@@ -5,13 +5,14 @@ from ariadne.asgi import GraphQL
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
+from kotoba_api.datasources.kanjidic import KanjiDic
 from kotoba_api.services import get_kanji_by_literal
 from kotoba_api.util import kanjidic2_to_kanji
 
 load_dotenv()
 
 kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
-
+kanjidic = KanjiDic(kanji)
 type_defs = load_schema_from_path("src/schema")
 
 query = QueryType()
@@ -26,7 +27,7 @@ def resolve_hello(*_):
 def resolve_kanji(*_, literal=None):
     if literal is None:
         return None
-    return get_kanji_by_literal(literal)
+    return get_kanji_by_literal(kanjidic, literal)
 
 
 # Create executable schema instance
