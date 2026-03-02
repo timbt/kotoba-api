@@ -1,7 +1,13 @@
-import os
 import xml.etree.ElementTree as ET
+from unittest.mock import patch
 
-from kotoba_api.util import _parse_kanjidic2_element_to_kanji, kanjidic2_to_kanji
+import pytest
+
+from kotoba_api.util import (
+    KanjiParsingException,
+    _parse_kanjidic2_element_to_kanji,
+    kanjidic2_to_kanji,
+)
 
 kanji_xml_neko = """<character>
 <literal>猫</literal>
@@ -65,6 +71,13 @@ kanji_xml_neko = """<character>
 """
 
 
+def _make_etree(xml_string: str) -> ET.ElementTree:
+    return ET.ElementTree(ET.fromstring(xml_string))
+
+
+# _parse_kanjidic2_element_to_kanji
+
+
 def test_parse_kanjidic2_element_to_kanji_parses_single_kanji():
     element = ET.fromstring(kanji_xml_neko)
     kanji = _parse_kanjidic2_element_to_kanji(element)
@@ -74,8 +87,44 @@ def test_parse_kanjidic2_element_to_kanji_parses_single_kanji():
     assert kanji.meanings == ("cat",)
 
 
-def test_kanjidic2_to_kanji_parses_first_kanji():
-    kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
+def test_parse_kanjidic2_element_raises_when_literal_missing():
+    element = ET.fromstring("<character><reading_meaning/></character>")
+    with pytest.raises(KanjiParsingException):
+        _parse_kanjidic2_element_to_kanji(element)
+
+
+def test_parse_kanjidic2_element_raises_when_reading_meaning_missing():
+    element = ET.fromstring("<character><literal>猫</literal></character>")
+    with pytest.raises(KanjiParsingException):
+        _parse_kanjidic2_element_to_kanji(element)
+
+
+# kanjidic2_to_kanji
+
+
+def test_kanjidic2_to_kanji_returns_empty_list_when_path_is_none():
+    assert kanjidic2_to_kanji(None) == []
+
+
+@patch("kotoba_api.util._fetch_kanjidic2_from_fs")
+def test_kanjidic2_to_kanji_parses_first_kanji(mock_fetch):
+    mock_fetch.return_value = _make_etree("""<kanjidic2>
+        <character>
+            <literal>亜</literal>
+            <reading_meaning>
+                <rmgroup>
+                    <reading r_type="ja_on">ア</reading>
+                    <reading r_type="ja_kun">つ.ぐ</reading>
+                    <meaning>Asia</meaning>
+                    <meaning>rank next</meaning>
+                    <meaning>come after</meaning>
+                    <meaning>-ous</meaning>
+                </rmgroup>
+            </reading_meaning>
+        </character>
+    </kanjidic2>""")
+
+    kanji = kanjidic2_to_kanji("any/path")
 
     assert kanji[0].literal == "亜"
     assert kanji[0].readings_on == ("ア",)
@@ -83,9 +132,34 @@ def test_kanjidic2_to_kanji_parses_first_kanji():
     assert kanji[0].meanings == ("Asia", "rank next", "come after", "-ous")
 
 
-def test_kanjidic2_to_kanji_skips_radicals():
-    etree = ET.parse(os.getenv("KANJIDIC2_PATH") or "")
-    kanji = kanjidic2_to_kanji(os.getenv("KANJIDIC2_PATH"))
+@patch("kotoba_api.util._fetch_kanjidic2_from_fs")
+def test_kanjidic2_to_kanji_skips_invalid_elements(mock_fetch):
+    mock_fetch.return_value = _make_etree("""<kanjidic2>
+        <character>
+            <literal>猫</literal>
+            <reading_meaning>
+                <rmgroup>
+                    <reading r_type="ja_on">ビョウ</reading>
+                    <reading r_type="ja_kun">ねこ</reading>
+                    <meaning>cat</meaning>
+                </rmgroup>
+            </reading_meaning>
+        </character>
+        <character>
+            <literal>犬</literal>
+            <reading_meaning>
+                <rmgroup>
+                    <reading r_type="ja_on">ケン</reading>
+                    <reading r_type="ja_kun">いぬ</reading>
+                    <meaning>dog</meaning>
+                </rmgroup>
+            </reading_meaning>
+        </character>
+        <character>
+            <literal>一</literal>
+        </character>
+    </kanjidic2>""")
 
-    assert len(etree.findall("character")) == 5
-    assert len(kanji) == 4
+    kanji = kanjidic2_to_kanji("any/path")
+
+    assert len(kanji) == 2
