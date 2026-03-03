@@ -45,3 +45,16 @@ def test_kanji_query(client: TestClient):
     assert "ビョウ" in payload["data"]["kanji"]["readings_on"]
     assert "ねこ" in payload["data"]["kanji"]["readings_kun"]
     assert "cat" in payload["data"]["kanji"]["meanings"]
+
+
+def test_kanji_query_returns_null_for_unknown_literal(client: TestClient):
+    response = client.post(
+        "/graphql/",
+        json={"query": 'query { kanji(literal: "龍") { literal } }'},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+    assert "errors" not in payload
+    assert payload["data"]["kanji"] is None
