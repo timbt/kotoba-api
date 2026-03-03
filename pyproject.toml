@@ -10,12 +10,7 @@ requires-python = ">=3.11,<4"
 dependencies = [
     "ariadne (>=0.26.2,<0.27.0)",
     "fastapi[standard] (>=0.128.0,<0.129.0)",
-    "ruff (>=0.14.11,<0.15.0)",
-    "pytest (>=9.0.2,<10.0.0)",
-    "dotenv (>=0.9.9,<0.10.0)",
-    "ty (>=0.0.12,<0.0.13)",
-    "pytest-env (>=1.2.0,<2.0.0)",
-    "pytest-cov>=7.0.0",
+    "python-dotenv>=1.2.1",
 ]
 
 [tool.poetry]
@@ -24,6 +19,15 @@ packages = [{include = "kotoba_api", from = "src"}]
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "pytest-env>=1.5.0",
+    "ruff>=0.15.4",
+    "ty>=0.0.20",
+]
 
 [tool.ruff.lint]
 extend-select = ["I"]
