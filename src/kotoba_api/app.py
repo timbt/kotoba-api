@@ -4,6 +4,7 @@ from ariadne import QueryType, load_schema_from_path, make_executable_schema
 from ariadne.asgi import GraphQL
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from kotoba_api.datasources.kanjidic import KanjiDic
 from kotoba_api.services import get_kanji_by_literal
@@ -35,5 +36,14 @@ schema = make_executable_schema(type_defs, query)
 
 # Mount Ariadne GraphQL as sub-application for FastAPI
 app = FastAPI()
+
+# Configure CORS
+origins = ["https://timbt.github.io", "http://127.0.0.1:5173"]
+app.add_middleware(
+    CORSMiddleware,  # ty:ignore[invalid-argument-type]
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["POST"],
+)
 
 app.mount("/graphql/", GraphQL(schema, debug=True))
