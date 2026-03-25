@@ -26,3 +26,6 @@ class KanjiDic:
             return self._literal_index[literal]
         else:
             return None
+
+    def search_kanji_by_meaning(self, meaning: str) -> list[Kanji]:
+        return [Kanji(literal="ッ", readings_on=(), readings_kun=(), meanings=())]
