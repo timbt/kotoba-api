@@ -20,7 +20,7 @@ def test_hello_query(client: TestClient):
     assert payload["data"]["hello"] == "Hello world!"
 
 
-def test_kanji_query(client: TestClient):
+def test_kanji_query_by_literal(client: TestClient):
     response = client.post(
         "/graphql/",
         json={
