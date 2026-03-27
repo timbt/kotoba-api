@@ -4,7 +4,7 @@ import pytest
 
 from kotoba_api.datasources.kanjidic import KanjiDic
 from kotoba_api.models import Kanji
-from kotoba_api.services import get_kanji_by_literal
+from kotoba_api.services import get_kanji_by_literal, search_kanji_by_meaning
 
 neko = Kanji(
     literal="猫",
@@ -32,3 +32,20 @@ def test_get_kanji_by_literal_returns_none_from_datasource(kanjidic: MagicMock):
 def test_get_kanji_by_literal_passes_literal_to_datasource(kanjidic: MagicMock):
     get_kanji_by_literal(kanjidic, "猫")
     kanjidic.get_kanji_by_literal.assert_called_once_with("猫")
+
+
+def test_search_kanji_by_meaning_returns_list_from_datasource(kanjidic: MagicMock):
+    kanjidic.search_kanji_by_meaning.return_value = [neko]
+    assert search_kanji_by_meaning(kanjidic, "cat") == [neko]
+
+
+def test_search_kanji_by_meaning_returns_empty_list_when_no_matches(
+    kanjidic: MagicMock,
+):
+    kanjidic.search_kanji_by_meaning.return_value = []
+    assert search_kanji_by_meaning(kanjidic, "asdf") == []
+
+
+def test_search_kanji_by_meaning_passes_meaning_to_datasource(kanjidic: MagicMock):
+    search_kanji_by_meaning(kanjidic, "cat")
+    kanjidic.search_kanji_by_meaning.assert_called_once_with("cat")
