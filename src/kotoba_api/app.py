@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from kotoba_api.datasources.kanjidic import KanjiDic
-from kotoba_api.services import get_kanji_by_literal
+from kotoba_api.services import get_kanji_by_literal, search_kanji_by_meaning
 from kotoba_api.util import kanjidic2_to_kanji
 
 load_dotenv()
@@ -29,6 +29,13 @@ def resolve_kanji(*_, literal=None):
     if literal is None:
         return None
     return get_kanji_by_literal(kanjidic, literal)
+
+
+@query.field(name="kanjiByMeaning")
+def resolve_kanji_by_meaning(*_, meaning=None):
+    if meaning is None:
+        return None
+    return search_kanji_by_meaning(kanjidic, meaning)
 
 
 # Create executable schema instance

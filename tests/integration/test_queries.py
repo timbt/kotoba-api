@@ -1,4 +1,3 @@
-import pytest
 from fastapi.testclient import TestClient
 
 
@@ -61,7 +60,6 @@ def test_kanji_query_returns_null_for_unknown_literal(client: TestClient):
     assert payload["data"]["kanji"] is None
 
 
-@pytest.mark.xfail(reason="kanjiByMeaning not yet implemented", strict=True)
 def test_kanji_search_by_meaning(client: TestClient):
     response = client.post(
         "/graphql/",
