@@ -51,18 +51,15 @@ def test_kanjidic_built_from_empty_list_returns_none():
     assert kanjidic.get_kanji_by_literal("猫") is None
 
 
-@pytest.mark.xfail(reason="Not yet implemented", strict=True)
 def test_search_kanji_by_meaning(kanjidic: KanjiDic):
     assert kanjidic.search_kanji_by_meaning("cat") == [neko]
 
 
-@pytest.mark.xfail(reason="Not yet implemented", strict=True)
 def test_search_kanji_by_meaning_with_multiple_results(kanjidic: KanjiDic):
     results = kanjidic.search_kanji_by_meaning("river")
     assert kawa1 in results
     assert kawa2 in results
 
 
-@pytest.mark.xfail(reason="Not yet implemented", strict=True)
 def test_search_kanji_by_unknown_meaning(kanjidic: KanjiDic):
     assert kanjidic.search_kanji_by_meaning("foobarbat") == []

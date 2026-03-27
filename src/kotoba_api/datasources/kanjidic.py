@@ -28,4 +28,10 @@ class KanjiDic:
             return None
 
     def search_kanji_by_meaning(self, meaning: str) -> list[Kanji]:
-        return [Kanji(literal="ッ", readings_on=(), readings_kun=(), meanings=())]
+        """
+        Returns a list of characters possessing meanings matching the provided meaning.
+
+        Returns an empty list of no characters match.
+        """
+
+        return [k for k in self._kanji if meaning in k.meanings]
