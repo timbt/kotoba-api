@@ -25,16 +25,12 @@ def resolve_hello(*_):
 
 
 @query.field("kanji")
-def resolve_kanji(*_, literal=None):
-    if literal is None:
-        return None
+def resolve_kanji(*_, literal):
     return get_kanji_by_literal(kanjidic, literal)
 
 
 @query.field(name="kanjiByMeaning")
-def resolve_kanji_by_meaning(*_, meaning=None):
-    if meaning is None:
-        return None
+def resolve_kanji_by_meaning(*_, meaning):
     return search_kanji_by_meaning(kanjidic, meaning)
 
 
