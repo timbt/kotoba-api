@@ -15,11 +15,23 @@ inu = Kanji(
     readings_kun=("いぬ",),
     meanings=("dog",),
 )
+kawa1 = Kanji(
+    literal="川",
+    readings_on=("セン",),
+    readings_kun=("かわ",),
+    meanings=("stream", "river"),
+)
+kawa2 = Kanji(
+    literal="河",
+    readings_on=("カ",),
+    readings_kun=("かわ",),
+    meanings=("river",),
+)
 
 
 @pytest.fixture
 def kanjidic():
-    return KanjiDic([neko, inu])
+    return KanjiDic([neko, inu, kawa1, kawa2])
 
 
 def test_get_kanji_by_literal_returns_matching_kanji(kanjidic: KanjiDic):
@@ -37,3 +49,17 @@ def test_get_kanji_by_literal_is_exact_match(kanjidic: KanjiDic):
 def test_kanjidic_built_from_empty_list_returns_none():
     kanjidic = KanjiDic([])
     assert kanjidic.get_kanji_by_literal("猫") is None
+
+
+def test_search_kanji_by_meaning(kanjidic: KanjiDic):
+    assert kanjidic.search_kanji_by_meaning("cat") == [neko]
+
+
+def test_search_kanji_by_meaning_with_multiple_results(kanjidic: KanjiDic):
+    results = kanjidic.search_kanji_by_meaning("river")
+    assert kawa1 in results
+    assert kawa2 in results
+
+
+def test_search_kanji_by_unknown_meaning(kanjidic: KanjiDic):
+    assert kanjidic.search_kanji_by_meaning("foobarbat") == []
