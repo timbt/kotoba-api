@@ -41,10 +41,11 @@ schema = make_executable_schema(type_defs, query)
 app = FastAPI()
 
 # Configure CORS
-origins = ["https://timbt.github.io", "http://127.0.0.1:5173"]
+origins = ["https://timbt.github.io"]
 app.add_middleware(
     CORSMiddleware,  # ty:ignore[invalid-argument-type]
     allow_origins=origins,
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["POST"],
 )
