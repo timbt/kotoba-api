@@ -6,7 +6,7 @@ type Kanji {
 }
 
 type SearchResults {
-  query: String!
+  searchQuery: String!
   kanji: [Kanji!]!
 }
 
@@ -14,5 +14,5 @@ type Query {
   hello: String!
   kanji(literal: String!): Kanji
   kanjiByMeaning(meaning: String!): [Kanji!]!
-  search(query: String!): SearchResults!
+  search(searchQuery: String!): SearchResults!
 }
