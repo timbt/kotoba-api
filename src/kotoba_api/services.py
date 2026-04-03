@@ -1,5 +1,5 @@
 from kotoba_api.datasources.kanjidic import KanjiDic
-from kotoba_api.models import Kanji
+from kotoba_api.models import Kanji, SearchResults
 
 
 def get_kanji_by_literal(kanjidic: KanjiDic, literal: str) -> Kanji | None:
@@ -8,3 +8,7 @@ def get_kanji_by_literal(kanjidic: KanjiDic, literal: str) -> Kanji | None:
 
 def search_kanji_by_meaning(kanjidic: KanjiDic, meaning: str) -> list[Kanji]:
     return kanjidic.search_kanji_by_meaning(meaning)
+
+
+def search(kanjidic: KanjiDic, search_query: str) -> SearchResults:
+    return SearchResults(search_query=search_query, kanji=[])
