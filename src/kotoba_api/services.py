@@ -17,6 +17,6 @@ def search(kanjidic: KanjiDic, search_query: str) -> SearchResults:
     if literal_result:
         kanji_results.append(literal_result)
 
-    # kanji_results.extend(kanjidic.search_kanji_by_meaning(search_query))
+    kanji_results.extend(kanjidic.search_kanji_by_meaning(search_query))
 
     return SearchResults(search_query=search_query, kanji=kanji_results)
