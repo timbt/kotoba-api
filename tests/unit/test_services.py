@@ -79,3 +79,13 @@ def test_search_returns_kanji_for_search_by_meaning(kanjidic: MagicMock):
 
     assert result.search_query == "猫"
     assert result.kanji == [neko]
+
+
+def test_search_does_not_return_duplicate_kanji(kanjidic: MagicMock):
+    kanjidic.get_kanji_by_literal.return_value = neko
+    kanjidic.search_kanji_by_meaning.return_value = [neko]
+
+    result = search(kanjidic, "猫")
+
+    assert result.search_query == "猫"
+    assert result.kanji == [neko]
