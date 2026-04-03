@@ -9,7 +9,7 @@ class Kanji:
     meanings: tuple[str, ...]
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass
 class SearchResults:
     search_query: str
     kanji: list[Kanji]
