@@ -59,3 +59,14 @@ def test_search_service_returns_empty_list_for_empty_search_string(kanjidic: Mag
 
     assert result.search_query == ""
     assert result.kanji == []
+
+
+@pytest.mark.xfail(reason="Not yet implemented", strict=True)
+def test_search_returns_single_kanji_for_literal_query(kanjidic: MagicMock):
+    kanjidic.get_kanji_by_literal.return_value = neko
+    kanjidic.search_kanji_by_meaning.return_value = []
+
+    result = search(kanjidic, "猫")
+
+    assert result.search_query == "猫"
+    assert result.kanji == [neko]
