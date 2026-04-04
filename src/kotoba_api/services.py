@@ -29,7 +29,7 @@ def search(kanjidic: KanjiDic, search_query: str) -> SearchResults:
     if literal_result:
         add_if_unseen_kanji(literal_result)
 
-    for k in kanjidic.search_kanji_by_meaning(search_query):
+    for k in kanjidic.search_kanji_by_normalized_meaning(search_query):
         if k not in kanji_results:
             kanji_results.append(k)
 

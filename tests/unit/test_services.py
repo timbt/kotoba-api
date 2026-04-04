@@ -81,7 +81,7 @@ def test_search_service_returns_empty_list_for_empty_search_string(kanjidic: Mag
 
 def test_search_returns_single_kanji_for_literal_query(kanjidic: MagicMock):
     kanjidic.get_kanji_by_literal.return_value = neko
-    kanjidic.search_kanji_by_meaning.return_value = []
+    kanjidic.search_kanji_by_normalized_meaning.return_value = []
 
     result = search(kanjidic, "猫")
 
@@ -91,7 +91,7 @@ def test_search_returns_single_kanji_for_literal_query(kanjidic: MagicMock):
 
 def test_search_returns_kanji_for_search_by_meaning(kanjidic: MagicMock):
     kanjidic.get_kanji_by_literal.return_value = None
-    kanjidic.search_kanji_by_meaning.return_value = [neko]
+    kanjidic.search_kanji_by_normalized_meaning.return_value = [neko]
 
     result = search(kanjidic, "猫")
 
@@ -101,7 +101,7 @@ def test_search_returns_kanji_for_search_by_meaning(kanjidic: MagicMock):
 
 def test_search_does_not_return_duplicate_kanji(kanjidic: MagicMock):
     kanjidic.get_kanji_by_literal.return_value = neko
-    kanjidic.search_kanji_by_meaning.return_value = [neko]
+    kanjidic.search_kanji_by_normalized_meaning.return_value = [neko]
 
     result = search(kanjidic, "猫")
 
