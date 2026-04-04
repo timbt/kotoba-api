@@ -6,7 +6,7 @@ type Kanji {
 }
 
 type SearchResults {
-  searchQuery: String!
+  search_query: String!
   kanji: [Kanji!]!
 }
 

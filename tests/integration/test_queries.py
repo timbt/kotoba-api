@@ -1,4 +1,3 @@
-import pytest
 from fastapi.testclient import TestClient
 
 
@@ -90,15 +89,15 @@ def test_kanji_search_by_meaning(client: TestClient):
     assert "cat" in neko["meanings"]
 
 
-@pytest.mark.xfail(reason="Feature not yet implemented", strict=True)
+# @pytest.mark.xfail(reason="Feature not yet implemented", strict=True)
 def test_search_query_search_by_literal(client: TestClient):
     response = client.post(
         "/graphql/",
         json={
-            "query": """"
+            "query": """
                 query {
                     search(searchQuery: "猫") {
-                        searchQuery
+                        search_query
                         kanji {
                             literal
                             readings_on
@@ -114,6 +113,11 @@ def test_search_query_search_by_literal(client: TestClient):
     assert response.status_code == 200
 
     payload = response.json()
+    kanji_list = payload["data"]["search"]["kanji"]
+    assert len(kanji_list) > 0
 
-    # Verify correct query was used in search
-    assert payload["data"]["meaning"] == "猫"
+    neko = next(k for k in kanji_list if k["literal"] == "猫")
+    assert neko is not None
+    assert "ビョウ" in neko["readings_on"]
+    assert "ねこ" in neko["readings_kun"]
+    assert "cat" in neko["meanings"]

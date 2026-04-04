@@ -1,7 +1,12 @@
 from unittest.mock import ANY, patch
 
-from kotoba_api.app import resolve_hello, resolve_kanji, resolve_kanji_by_meaning
-from kotoba_api.models import Kanji
+from kotoba_api.app import (
+    resolve_hello,
+    resolve_kanji,
+    resolve_kanji_by_meaning,
+    resolve_search,
+)
+from kotoba_api.models import Kanji, SearchResults
 
 neko = Kanji(
     literal="猫",
@@ -38,3 +43,16 @@ def test_kanji_by_meaning_resolver_delegates_to_service(mock_service):
 def test_kanji_by_meaning_resolver_passes_meaning_to_service(mock_service):
     resolve_kanji_by_meaning(None, None, meaning="cat")
     mock_service.assert_called_once_with(ANY, "cat")
+
+
+@patch("kotoba_api.app.search")
+def test_search_resolver_delegates_to_service(mock_service):
+    expected = SearchResults(search_query="猫", kanji=[neko])
+    mock_service.return_value = expected
+    assert resolve_search(None, None, searchQuery="猫") == expected
+
+
+@patch("kotoba_api.app.search")
+def test_search_resolver_passes_search_query_to_service(mock_service):
+    resolve_search(None, None, searchQuery="猫")
+    mock_service.assert_called_once_with(ANY, "猫")
