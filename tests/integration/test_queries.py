@@ -87,3 +87,102 @@ def test_kanji_search_by_meaning(client: TestClient):
     assert "ビョウ" in neko["readings_on"]
     assert "ねこ" in neko["readings_kun"]
     assert "cat" in neko["meanings"]
+
+
+def test_search_query_search_by_literal(client: TestClient):
+    response = client.post(
+        "/graphql/",
+        json={
+            "query": """
+                query {
+                    search(searchQuery: "猫") {
+                        search_query
+                        kanji {
+                            literal
+                            readings_on
+                            readings_kun
+                            meanings
+                        }
+                    }
+                }
+            """
+        },
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+    kanji_list = payload["data"]["search"]["kanji"]
+    assert len(kanji_list) > 0
+
+    neko = next(k for k in kanji_list if k["literal"] == "猫")
+    assert neko is not None
+    assert "ビョウ" in neko["readings_on"]
+    assert "ねこ" in neko["readings_kun"]
+    assert "cat" in neko["meanings"]
+
+
+def test_search_query_search_by_meaning(client: TestClient):
+    response = client.post(
+        "/graphql/",
+        json={
+            "query": """
+                query {
+                    search(searchQuery: "cat") {
+                        search_query
+                        kanji {
+                            literal
+                            readings_on
+                            readings_kun
+                            meanings
+                        }
+                    }
+                }
+            """
+        },
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+    kanji_list = payload["data"]["search"]["kanji"]
+    assert len(kanji_list) > 0
+
+    neko = next(k for k in kanji_list if k["literal"] == "猫")
+    assert neko is not None
+    assert "ビョウ" in neko["readings_on"]
+    assert "ねこ" in neko["readings_kun"]
+    assert "cat" in neko["meanings"]
+
+
+def test_search_query_search_by_meaning_with_normalization(client: TestClient):
+    response = client.post(
+        "/graphql/",
+        json={
+            "query": """
+                query {
+                    search(searchQuery: " CAT   ") {
+                        search_query
+                        kanji {
+                            literal
+                            readings_on
+                            readings_kun
+                            meanings
+                        }
+                    }
+                }
+            """
+        },
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+    kanji_list = payload["data"]["search"]["kanji"]
+    assert len(kanji_list) > 0
+
+    neko = next(k for k in kanji_list if k["literal"] == "猫")
+    assert neko is not None
+    assert "ビョウ" in neko["readings_on"]
+    assert "ねこ" in neko["readings_kun"]
+    assert "cat" in neko["meanings"]

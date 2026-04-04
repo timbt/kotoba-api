@@ -55,6 +55,10 @@ def test_search_kanji_by_meaning(kanjidic: KanjiDic):
     assert kanjidic.search_kanji_by_meaning("cat") == [neko]
 
 
+def test_search_kanji_by_meaning_with_normalization(kanjidic: KanjiDic):
+    assert kanjidic.search_kanji_by_normalized_meaning(" Cat ") == [neko]
+
+
 def test_search_kanji_by_meaning_with_multiple_results(kanjidic: KanjiDic):
     results = kanjidic.search_kanji_by_meaning("river")
     assert kawa1 in results

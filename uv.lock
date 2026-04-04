@@ -493,6 +493,7 @@ dev = [
     { name = "pytest-env" },
     { name = "ruff" },
     { name = "ty" },
+    { name = "watchfiles" },
 ]
 
 [package.metadata]
@@ -509,6 +510,7 @@ dev = [
     { name = "pytest-env", specifier = ">=1.5.0" },
     { name = "ruff", specifier = ">=0.15.4" },
     { name = "ty", specifier = ">=0.0.20" },
+    { name = "watchfiles", specifier = ">=1.1.1" },
 ]
 
 [[package]]
