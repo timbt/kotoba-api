@@ -14,8 +14,8 @@ class KanjiDic:
         return index
 
     def __init__(self, kanji: list[Kanji]):
-        self._kanji = kanji
-        self._literal_index = self._make_literal_index(kanji)
+        self._kanji: list[Kanji] = kanji
+        self._literal_index: dict[str, Kanji] = self._make_literal_index(kanji)
 
     def get_kanji_by_literal(self, literal: str) -> Kanji | None:
         """
@@ -49,7 +49,7 @@ class KanjiDic:
 
         matches: list[Kanji] = []
         for kanji in self._kanji:
-            meanings = [m.strip().lower() for m in kanji.meanings]
+            meanings: list[str] = [m.strip().lower() for m in kanji.meanings]
             if meaning.strip().lower() in meanings:
                 matches.append(kanji)
 
