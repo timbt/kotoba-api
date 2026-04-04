@@ -6,8 +6,14 @@ def get_kanji_by_literal(kanjidic: KanjiDic, literal: str) -> Kanji | None:
     return kanjidic.get_kanji_by_literal(literal)
 
 
-def search_kanji_by_meaning(kanjidic: KanjiDic, meaning: str) -> list[Kanji]:
-    return kanjidic.search_kanji_by_meaning(meaning)
+def search_kanji_by_meaning(
+    kanjidic: KanjiDic, meaning: str, normalize=False
+) -> list[Kanji]:
+    return (
+        kanjidic.search_kanji_by_normalized_meaning(meaning)
+        if normalize
+        else kanjidic.search_kanji_by_meaning(meaning)
+    )
 
 
 def search(kanjidic: KanjiDic, search_query: str) -> SearchResults:

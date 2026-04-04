@@ -51,6 +51,24 @@ def test_search_kanji_by_meaning_passes_meaning_to_datasource(kanjidic: MagicMoc
     kanjidic.search_kanji_by_meaning.assert_called_once_with("cat")
 
 
+def test_search_kanji_by_meaning_uses_normalized_datasource_method_when_normalize_is_true(
+    kanjidic: MagicMock,
+):
+    kanjidic.search_kanji_by_normalized_meaning.return_value = [neko]
+    assert search_kanji_by_meaning(kanjidic, "Cat", normalize=True) == [neko]
+    kanjidic.search_kanji_by_normalized_meaning.assert_called_once_with("Cat")
+    kanjidic.search_kanji_by_meaning.assert_not_called()
+
+
+def test_search_kanji_by_meaning_uses_standard_datasource_method_when_normalize_is_false(
+    kanjidic: MagicMock,
+):
+    kanjidic.search_kanji_by_meaning.return_value = [neko]
+    assert search_kanji_by_meaning(kanjidic, "cat", normalize=False) == [neko]
+    kanjidic.search_kanji_by_meaning.assert_called_once_with("cat")
+    kanjidic.search_kanji_by_normalized_meaning.assert_not_called()
+
+
 def test_search_service_returns_empty_list_for_empty_search_string(kanjidic: MagicMock):
     kanjidic.get_kanji_by_literal.return_value = None
     kanjidic.search_kanji_by_meaning.return_value = []
